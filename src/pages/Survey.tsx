@@ -9,7 +9,7 @@ import { ProgressBar } from '../components/ui/ProgressBar';
 import { Modal } from '../components/ui/Modal';
 import { LikertScale } from '../components/LikertScale';
 import { Skeleton } from '../components/ui/Skeleton';
-import type { Encuesta, Respuesta } from '../types';
+import type { Encuesta, Pregunta } from '../types';
 import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
 
 export function Survey() {
@@ -31,7 +31,7 @@ export function Survey() {
   const cargarEncuesta = async () => {
     if (!id) return;
     try {
-      const data = await encuestaService.obtenerEncuesta(id);
+      const data = await encuestaService.obtenerEncuesta(id.toString());
       setEncuesta(data);
     } catch (error) {
       toast.error('Error al cargar la encuesta');
@@ -49,17 +49,17 @@ export function Survey() {
 
   const calcularProgreso = () => {
     if (!encuesta) return 0;
-    return Math.round((respuestas.size / encuesta.preguntas.length) * 100);
+    return Math.round((respuestas.size / encuesta.data.preguntas.length) * 100);
   };
 
   const puedeAvanzar = () => {
     if (!encuesta) return false;
-    const preguntaId = encuesta.preguntas[preguntaActual]?.id;
-    return respuestas.has(preguntaId);
+    const preguntaId = encuesta.data.preguntas[preguntaActual]?.id_pregunta;
+    return respuestas.has(preguntaId.toString());
   };
 
   const handleSiguiente = () => {
-    if (!encuesta || preguntaActual >= encuesta.preguntas.length - 1) return;
+    if (!encuesta || preguntaActual >= encuesta.data.preguntas.length - 1) return;
     setPreguntaActual(preguntaActual + 1);
   };
 
@@ -71,21 +71,45 @@ export function Survey() {
   const handleSubmit = async () => {
     if (!encuesta || !id) return;
 
-    if (respuestas.size !== encuesta.preguntas.length) {
+    if (respuestas.size !== encuesta.data.preguntas.length) {
       toast.error('Por favor, responde todas las preguntas antes de enviar');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const respuestasArray: Respuesta[] = Array.from(respuestas.entries()).map(
-        ([preguntaId, valor]) => ({
-          preguntaId,
-          valor,
-        })
-      );
+      // 1. Preparar arrays de preguntas y respuestas
+      const preguntasArray: string[] = [];
+      const respuestasArray: string[] = [];
 
-      await encuestaService.enviarRespuestas(id, { respuestas: respuestasArray });
+      // 2. Recorrer las respuestas en el mismo orden que las preguntas
+      encuesta.data.preguntas.forEach((pregunta: Pregunta) => {
+        const valor = respuestas.get(pregunta.id_pregunta.toString());
+        if (valor !== undefined) {
+          preguntasArray.push(pregunta.pregunta);
+          respuestasArray.push(valor.toString());
+        }
+      });
+
+      // 3. Validar que tenemos el mismo número de preguntas y respuestas
+      if (preguntasArray.length !== respuestasArray.length) {
+        throw new Error('Error al procesar las respuestas');
+      }
+
+      // 4. Crear el objeto en el formato que espera el backend
+      const requestData = {
+        responses: [
+          {
+            id_encuesta: [id.toString()], // El backend espera un array
+            preguntas: preguntasArray,
+            respuestas: respuestasArray
+          }
+        ]
+      };
+
+      console.log('Enviando al backend:', requestData); // Para debug
+
+      await encuestaService.enviarRespuestas(Number(id), requestData);
       toast.success('¡Encuesta enviada exitosamente!');
       navigate('/dashboard');
     } catch (error) {
@@ -120,17 +144,17 @@ export function Survey() {
     );
   }
 
-  const pregunta = encuesta.preguntas[preguntaActual];
-  const esUltimaPregunta = preguntaActual === encuesta.preguntas.length - 1;
+  const pregunta = encuesta.data.preguntas[preguntaActual];
+  const esUltimaPregunta = preguntaActual === encuesta.data.preguntas.length - 1;
 
   return (
     <Layout>
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {encuesta.titulo}
+            {encuesta.data.tipo}
           </h1>
-          <p className="text-gray-600">{encuesta.descripcion}</p>
+          <p className="text-gray-600">{encuesta.data.descripcion}</p>
         </div>
 
         <ProgressBar progress={calcularProgreso()} />
@@ -140,17 +164,17 @@ export function Survey() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-medium text-gray-500">
-                  Pregunta {preguntaActual + 1} de {encuesta.preguntas.length}
+                  Pregunta {preguntaActual + 1} de {encuesta.data.preguntas.length}
                 </span>
               </div>
               <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                {pregunta?.texto}
+                {pregunta.pregunta}
               </h2>
             </div>
 
             <LikertScale
-              value={respuestas.get(pregunta.id) ?? null}
-              onChange={(valor) => handleRespuesta(pregunta.id, valor)}
+              value={respuestas.get(pregunta.id_pregunta.toString()) ?? null}
+              onChange={(valor) => handleRespuesta(pregunta.id_pregunta.toString(), valor)}
             />
 
             <div className="flex items-center justify-between pt-6 border-t border-gray-200">
@@ -168,7 +192,7 @@ export function Survey() {
                 <Button
                   variant="primary"
                   onClick={() => setShowConfirmModal(true)}
-                  disabled={!puedeAvanzar() || respuestas.size !== encuesta.preguntas.length}
+                  disabled={!puedeAvanzar() || respuestas.size !== encuesta.data.preguntas.length}
                   className="flex items-center gap-2"
                 >
                   <Send size={20} />
@@ -219,7 +243,7 @@ export function Survey() {
         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
           <p className="text-sm text-gray-600">
             Has respondido <strong>{respuestas.size}</strong> de{' '}
-            <strong>{encuesta.preguntas.length}</strong> preguntas.
+            <strong>{encuesta.data.preguntas.length}</strong> preguntas.
           </p>
         </div>
       </Modal>

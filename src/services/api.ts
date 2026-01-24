@@ -1,5 +1,5 @@
 import { api } from '../lib/axios';
-import type { AuthResponse, Encuesta, EncuestaRespuesta, DataProgresoEmpleado } from '../types';
+import type { AuthResponse, Encuesta, DataProgresoEmpleado, EnviarEncuestaRequest } from '../types';
 
 
 export const authService = {
@@ -17,8 +17,8 @@ export const encuestaService = {
     return response.data;
   },
 
-  enviarRespuestas: async (id: string, respuestas: EncuestaRespuesta): Promise<void> => {
-    await api.post(`/encuestas/${id}/enviar`, respuestas);
+  enviarRespuestas: async ( id: number, requestData: EnviarEncuestaRequest): Promise<any> => {
+    await api.post(`/encuestas/${id}/submit`, requestData);
   },
 };
 

@@ -36,7 +36,7 @@ export function Dashboard() {
   
   
   
-  const handleEncuestaClick = (encuestaId: string, estado: string) => {
+  const handleEncuestaClick = (encuestaId: number, estado: string) => {
     if (estado === 'completada') {
       toast.success('Esta encuesta ya ha sido completada');
       return;
@@ -62,9 +62,9 @@ export function Dashboard() {
     );
   }
   const calcularProgresoTotal = () => {
-      if (!progreso || progreso.data.total_encuestas === 0) return 0;
-      const total = progreso.data.total_encuestas;
-      const completadas = progreso.data.encuestas_completadas;
+      if (!progreso || progreso.data.estadisticas.total_encuestas === 0) return 0;
+      const total = progreso.data.estadisticas.total_encuestas;
+      const completadas = progreso.data.estadisticas.encuestas_completadas;
       return Math.round((completadas / total) * 100);
     };
 
@@ -97,7 +97,7 @@ export function Dashboard() {
               </div>
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {progreso?.data.encuestas_completadas || 0}
+                  {progreso?.data.estadisticas.encuestas_completadas || 0}
                 </p>
                 <p className="text-sm text-gray-600">Encuestas Completadas</p>
               </div>
@@ -111,7 +111,7 @@ export function Dashboard() {
               </div>
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {progreso?.data.pendientes || 0}
+                  {progreso?.data.estadisticas.pendientes || 0}
                 </p>
                 <p className="text-sm text-gray-600">Encuestas Pendientes</p>
               </div>
@@ -149,7 +149,7 @@ export function Dashboard() {
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-blue-600 h-2 rounded-full transition-all"
-                          style={{ width: `${encuesta.estado}%` }}
+                          style={{ width: `${(encuesta.estado)==="en_progreso"? 0 :100}%` }}
                         />
                       </div>
                     )}
@@ -159,13 +159,13 @@ export function Dashboard() {
                         {encuesta.estado === 'completada' && encuesta.fechaCompletado
                           ? `Completada`
                           : encuesta.estado === 'en_progreso'
-                          ? `${encuesta.estado}% completado`
-                          : 'Sin iniciar'}
+                          ? `${(encuesta.estado)==="en_progreso"? 0 :100}% completado`
+                          : 'Completada'}
                       </span>
                       <Button
                         variant={encuesta.estado === 'completada' ? 'outline' : 'primary'}
                         className="text-sm py-2 px-4"
-                        onClick={() => handleEncuestaClick(encuesta.encuesta_nombre, encuesta.estado)}
+                        onClick={() => handleEncuestaClick((Number (encuesta.id_encuesta)), encuesta.estado)}
                         disabled={encuesta.estado === 'completada'}
                       >
                         {encuesta.estado === 'completada'

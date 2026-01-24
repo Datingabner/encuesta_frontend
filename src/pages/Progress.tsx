@@ -5,11 +5,11 @@ import { Layout } from '../components/Layout';
 import { Card } from '../components/ui/Card';
 import { SkeletonCard } from '../components/ui/Skeleton';
 import { formatearFecha, getEstadoColor, getEstadoTexto } from '../utils/helpers';
-import type { ProgresoEmpleado } from '../types';
+import type { DataProgresoEmpleado } from '../types';
 import { BarChart3 } from 'lucide-react';
 
 export function Progress() {
-  const [progreso, setProgreso] = useState<ProgresoEmpleado | null>(null);
+  const [progreso, setProgreso] = useState<DataProgresoEmpleado | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export function Progress() {
           <Card>
             <div className="text-center">
               <p className="text-5xl font-bold text-blue-600">
-                {progreso?.totalCompletadas || 0}
+                {progreso?.data.estadisticas.encuestas_completadas || 0}
               </p>
               <p className="text-gray-600 mt-2">Encuestas Completadas</p>
             </div>
@@ -65,7 +65,7 @@ export function Progress() {
           <Card>
             <div className="text-center">
               <p className="text-5xl font-bold text-yellow-600">
-                {progreso?.totalPendientes || 0}
+                {progreso?.data.estadisticas.pendientes || 0}
               </p>
               <p className="text-gray-600 mt-2">Encuestas Pendientes</p>
             </div>
@@ -77,7 +77,7 @@ export function Progress() {
             Historial de Encuestas
           </h2>
 
-          {progreso?.encuestas && progreso.encuestas.length > 0 ? (
+          {progreso?.data.progreso && progreso.data.progreso.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -97,14 +97,14 @@ export function Progress() {
                   </tr>
                 </thead>
                 <tbody>
-                  {progreso.encuestas.map((encuesta) => (
+                  {progreso.data.progreso.map((encuesta) => (
                     <tr
-                      key={encuesta.id}
+                      key={encuesta.id_encuesta}
                       className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                     >
                       <td className="py-4 px-4">
                         <p className="font-medium text-gray-900">
-                          {encuesta.titulo}
+                          {encuesta.encuesta_nombre}
                         </p>
                       </td>
                       <td className="py-4 px-4">
@@ -121,11 +121,11 @@ export function Progress() {
                           <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[120px]">
                             <div
                               className="bg-blue-600 h-2 rounded-full transition-all"
-                              style={{ width: `${encuesta.progreso}%` }}
+                              style={{ width: `${progreso.data.estadisticas.enviadas}%` }}
                             />
                           </div>
                           <span className="text-sm text-gray-600 min-w-[45px]">
-                            {encuesta.progreso}%
+                            {progreso.data.estadisticas.enviadas}%
                           </span>
                         </div>
                       </td>

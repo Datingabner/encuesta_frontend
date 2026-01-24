@@ -11,18 +11,21 @@ export interface AuthResponse {
 }
 
 export interface Pregunta {
-  id: string;
-  texto: string;
-  orden: number;
+  id_pregunta: number;
+  pregunta: string;
+  estado?: 'inhabilitada' | 'activo';
+  tipo?: 'likert' | 'abierta' | 'opcion_multiple';
+  respuestas: string[];
+  requerido: boolean;
 }
 
 export interface Encuesta {
-  id: string;
-  titulo: string;
-  descripcion: string;
-  preguntas: Pregunta[];
-  estado?: 'pendiente' | 'en_progreso' | 'completada';
-  progreso?: number;
+  data: {
+    id: number;
+    tipo: string;
+    descripcion: string;
+    preguntas: Pregunta[];
+  }
 }
 
 export interface Respuesta {
@@ -48,13 +51,25 @@ export interface EncuestaProgreso {
 
 export interface DataProgresoEmpleado {
   data: {
-    total_encuestas: number,
-    en_progreso: number,
-    pendientes: number,
-    enviadas: number,
-    encuestas_completadas: number
+    estadisticas: {
+      total_encuestas: number;
+      en_progreso: number;
+      pendientes: number;
+      enviadas: number;
+      encuestas_completadas: number;
+    };
     progreso: EncuestaProgreso[];
   }
+}
+
+export interface RespuestaBackend {
+  id_encuesta: string[]; // Array con el ID
+  preguntas: string[];   // Array de textos de preguntas
+  respuestas: string[];  // Array de respuestas como strings
+}
+
+export interface EnviarEncuestaRequest {
+  responses: RespuestaBackend[];
 }
 /*
 export interface ProgresoEmpleado {
