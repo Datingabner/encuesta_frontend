@@ -1,12 +1,12 @@
-import { ReactNode, useEffect } from 'react';
+import {  useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  children: ReactNode;
-  footer?: ReactNode;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
 }
 
 export function Modal({ isOpen, onClose, title, children, footer }: ModalProps) {

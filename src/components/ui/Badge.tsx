@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
 
 interface BadgeProps {
-  children: ReactNode;
+  children: React.ReactNode;
   variant?: 'success' | 'warning' | 'info' | 'default';
   className?: string;
 }

@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 import { empleadoService } from '../services/api';
 import { Layout } from '../components/Layout';
 import { Card } from '../components/ui/Card';
-import { Badge } from '../components/ui/Badge';
 import { SkeletonCard } from '../components/ui/Skeleton';
 import { formatearFecha, getEstadoColor, getEstadoTexto } from '../utils/helpers';
 import type { ProgresoEmpleado } from '../types';

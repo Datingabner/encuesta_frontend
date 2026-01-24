@@ -6,8 +6,8 @@ export interface Empleado {
 }
 
 export interface AuthResponse {
-  token: string;
-  empleado: Empleado;
+  data: { empleado: Empleado, token: string };
+
 }
 
 export interface Pregunta {
@@ -35,16 +35,35 @@ export interface EncuestaRespuesta {
 }
 
 export interface EncuestaProgreso {
-  id: string;
-  titulo: string;
+  id_encuesta: string;
+  encuesta_nombre: string;
+  encuesta_tipo: string;
+  encuesta_descripcion: string;
   estado: 'pendiente' | 'en_progreso' | 'completada';
+  tiene_puntaje: boolean;
+  puede_tomar: boolean;
   fechaInicio?: string;
   fechaCompletado?: string;
-  progreso: number;
 }
 
-export interface ProgresoEmpleado {
-  encuestas: EncuestaProgreso[];
-  totalCompletadas: number;
-  totalPendientes: number;
+export interface DataProgresoEmpleado {
+  data: {
+    total_encuestas: number,
+    en_progreso: number,
+    pendientes: number,
+    enviadas: number,
+    encuestas_completadas: number
+    progreso: EncuestaProgreso[];
+  }
 }
+/*
+export interface ProgresoEmpleado {
+  progreso: EncuestaProgreso[];
+  estadisticas: {
+    total_encuestas: number,
+    en_progreso: number,
+    pendientes: number,
+    enviadas: number,
+    encuestas_completadas: number
+  };
+}*/

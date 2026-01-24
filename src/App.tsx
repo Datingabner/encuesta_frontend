@@ -6,6 +6,7 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Survey } from './pages/Survey';
 import { Progress } from './pages/Progress';
+import './App.css';
 
 function App() {
   return (

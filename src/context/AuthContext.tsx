@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import type { Empleado } from '../types';
 
 interface AuthContextType {
@@ -11,13 +11,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [empleado, setEmpleado] = useState<Empleado | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    const storedEmpleado = localStorage.getItem('empleado');
+    const storedEmpleado = localStorage.getItem('numero_empleado');
 
     if (storedToken && storedEmpleado) {
       setToken(storedToken);

@@ -9,19 +9,20 @@ import { Button } from '../components/ui/Button';
 import { CircularProgress } from '../components/ui/ProgressBar';
 import { SkeletonCard } from '../components/ui/Skeleton';
 import { getEstadoColor, getEstadoTexto } from '../utils/helpers';
-import type { ProgresoEmpleado } from '../types';
+import type { DataProgresoEmpleado } from '../types';
 import { ClipboardList, CheckCircle, Clock } from 'lucide-react';
 
 export function Dashboard() {
   const { empleado } = useAuth();
   const navigate = useNavigate();
-  const [progreso, setProgreso] = useState<ProgresoEmpleado | null>(null);
+  const [progreso, setProgreso] = useState<DataProgresoEmpleado | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     cargarProgreso();
   }, []);
 
+  
   const cargarProgreso = async () => {
     try {
       const data = await empleadoService.obtenerProgreso();
@@ -32,14 +33,9 @@ export function Dashboard() {
       setIsLoading(false);
     }
   };
-
-  const calcularProgresoTotal = () => {
-    if (!progreso || progreso.encuestas.length === 0) return 0;
-    const total = progreso.encuestas.length;
-    const completadas = progreso.totalCompletadas;
-    return Math.round((completadas / total) * 100);
-  };
-
+  
+  
+  
   const handleEncuestaClick = (encuestaId: string, estado: string) => {
     if (estado === 'completada') {
       toast.success('Esta encuesta ya ha sido completada');
@@ -47,7 +43,7 @@ export function Dashboard() {
     }
     navigate(`/encuesta/${encuestaId}`);
   };
-
+  
   if (isLoading) {
     return (
       <Layout>
@@ -65,6 +61,12 @@ export function Dashboard() {
       </Layout>
     );
   }
+  const calcularProgresoTotal = () => {
+      if (!progreso || progreso.data.total_encuestas === 0) return 0;
+      const total = progreso.data.total_encuestas;
+      const completadas = progreso.data.encuestas_completadas;
+      return Math.round((completadas / total) * 100);
+    };
 
   return (
     <Layout>
@@ -95,7 +97,7 @@ export function Dashboard() {
               </div>
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {progreso?.totalCompletadas || 0}
+                  {progreso?.data.encuestas_completadas || 0}
                 </p>
                 <p className="text-sm text-gray-600">Encuestas Completadas</p>
               </div>
@@ -109,7 +111,7 @@ export function Dashboard() {
               </div>
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {progreso?.totalPendientes || 0}
+                  {progreso?.data.pendientes || 0}
                 </p>
                 <p className="text-sm text-gray-600">Encuestas Pendientes</p>
               </div>
@@ -125,14 +127,14 @@ export function Dashboard() {
             </h2>
           </div>
 
-          {progreso?.encuestas && progreso.encuestas.length > 0 ? (
+          {progreso?.data.progreso && progreso.data.progreso.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {progreso.encuestas.map((encuesta) => (
-                <Card key={encuesta.id} className="hover:shadow-lg transition-shadow">
+              {progreso.data.progreso.map((encuesta) => (
+                <Card key={encuesta.id_encuesta} className="hover:shadow-lg transition-shadow">
                   <div className="space-y-4">
                     <div className="flex items-start justify-between">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {encuesta.titulo}
+                        {encuesta.encuesta_nombre}
                       </h3>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${getEstadoColor(
@@ -147,7 +149,7 @@ export function Dashboard() {
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-blue-600 h-2 rounded-full transition-all"
-                          style={{ width: `${encuesta.progreso}%` }}
+                          style={{ width: `${encuesta.estado}%` }}
                         />
                       </div>
                     )}
@@ -157,13 +159,13 @@ export function Dashboard() {
                         {encuesta.estado === 'completada' && encuesta.fechaCompletado
                           ? `Completada`
                           : encuesta.estado === 'en_progreso'
-                          ? `${encuesta.progreso}% completado`
+                          ? `${encuesta.estado}% completado`
                           : 'Sin iniciar'}
                       </span>
                       <Button
                         variant={encuesta.estado === 'completada' ? 'outline' : 'primary'}
                         className="text-sm py-2 px-4"
-                        onClick={() => handleEncuestaClick(encuesta.id, encuesta.estado)}
+                        onClick={() => handleEncuestaClick(encuesta.encuesta_nombre, encuesta.estado)}
                         disabled={encuesta.estado === 'completada'}
                       >
                         {encuesta.estado === 'completada'

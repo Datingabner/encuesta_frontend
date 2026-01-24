@@ -12,7 +12,7 @@ import { Card } from '../components/ui/Card';
 import { UserCircle } from 'lucide-react';
 
 const loginSchema = z.object({
-  numeroEmpleado: z
+  Empleado: z
     .string()
     .min(1, 'El número de empleado es requerido')
     .transform(val => val.trim()),
@@ -36,12 +36,13 @@ export function Login() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const response = await authService.validarEmpleado(data.numeroEmpleado);
-      login(response.token, response.empleado);
-      toast.success(`¡Bienvenido, ${response.empleado.nombre}!`);
+      const response = await authService.validarEmpleado(data.Empleado);
+      login(response.data.token, response.data.empleado);
+      toast.success(`¡Bienvenido, ${response.data.empleado.nombre}!`);
       navigate('/dashboard');
     } catch (error) {
       toast.error('Número de empleado no válido. Por favor, intenta de nuevo.');
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -67,8 +68,8 @@ export function Login() {
             label="Número de Empleado"
             type="text"
             placeholder="Ej: EMP001 o 12345"
-            error={errors.numeroEmpleado?.message}
-            {...register('numeroEmpleado')}
+            error={errors.Empleado?.message}
+            {...register('Empleado')}
             autoFocus
           />
 
