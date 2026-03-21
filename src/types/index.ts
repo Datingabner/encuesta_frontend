@@ -71,6 +71,74 @@ export interface RespuestaBackend {
 export interface EnviarEncuestaRequest {
   responses: RespuestaBackend[];
 }
+
+export interface AdminResult {
+  empleado: { id: number; nombre: string };
+  encuesta: { tipo: string; descripcion: string };
+  detalle_clinico: { preguntas: string[]; respuestas: string[] };
+  puntaje_total: number;
+  interpretacion: string;
+  nivel_riesgo: 'bajo' | 'medio' | 'alto' | 'desconocido';
+  fecha_completado: string;
+}
+
+export interface AdminStats {
+  total_completed: number;
+  average_score: number;
+  distribucion_riesgo: {
+    bajo: number;
+    medio: number;
+    alto: number;
+    desconocido: number;
+  };
+}
+
+export interface AdminResponse {
+  success: boolean;
+  data: {
+    results: AdminResult[];
+    statistics: AdminStats;
+  };
+}
+
+
+export interface AdminResultado {
+  empleado: {
+    id: number;
+    nombre: string;
+  };
+  encuesta: {
+    tipo: string;
+    descripcion: string;
+  };
+  detalle_clinico: {
+    preguntas: string[];
+    respuestas: string[];
+  };
+  puntaje_total: number;
+  interpretacion: string;
+  nivel_riesgo: 'bajo' | 'medio' | 'alto' | 'desconocido';
+  fecha_completado: string;
+}
+
+export interface AdminStatistics {
+  total_completed: number;
+  average_score: number;
+  distribucion_riesgo: {
+    bajo: number;
+    medio: number;
+    alto: number;
+    desconocido: number;
+  };
+}
+
+export interface AdminResultsResponse {
+  success: boolean;
+  data: {
+    results: AdminResultado[];
+    statistics: AdminStatistics;
+  };
+}
 /*
 export interface ProgresoEmpleado {
   progreso: EncuestaProgreso[];

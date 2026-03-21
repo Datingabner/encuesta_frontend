@@ -1,5 +1,5 @@
 import { api } from '../lib/axios';
-import type { AuthResponse, Encuesta, DataProgresoEmpleado, EnviarEncuestaRequest } from '../types';
+import type { AuthResponse, Encuesta, DataProgresoEmpleado, EnviarEncuestaRequest, AdminResponse } from '../types';
 
 
 export const authService = {
@@ -27,4 +27,15 @@ export const empleadoService = {
     const response = await api.get<DataProgresoEmpleado>('/empleado/progress');
     return response.data;
   },
+};
+
+
+// Añadir a src/services/api.ts
+export const adminService = {
+  obtenerResultados: async (apiKey: string): Promise<AdminResponse> => {
+    const { data } = await api.get<AdminResponse>('/admin/results', {
+      headers: { 'x-api-key': apiKey }
+    });
+    return data;
+  }
 };
