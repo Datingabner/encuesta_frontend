@@ -4,10 +4,8 @@ import { Lock, Shield } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAdminAuth } from './../context/AdminAuthContext';
+import { adminService } from '../services/api';
 import toast from 'react-hot-toast';
-
-//importacion de la API Key correcta desde un archivo de configuración o variable de entorno
-const CORRECT_API_KEY = import.meta.env.VITE_ADMIN_API_KEY || '';
 
 export function AdminLogin() {
   const [apiKey, setApiKey] = useState('');
@@ -20,20 +18,25 @@ export function AdminLogin() {
     setIsLoading(true);
 
     try {
-      if (apiKey === CORRECT_API_KEY) {
+      // Validar la API Key contra el backend
+      const validation = await adminService.validarApiKey(apiKey);
+      
+      if (validation.valid) {
         login(apiKey);
         toast.success('Acceso concedido');
         navigate('/admin/dashboard');
       } else {
-        toast.error('API Key inválida');
+        toast.error(validation.message || 'API Key inválida');
       }
+    } catch (error) {
+      toast.error('Error al validar credenciales');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           <div className="flex justify-center mb-8">

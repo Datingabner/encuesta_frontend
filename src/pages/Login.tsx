@@ -42,14 +42,14 @@ export function Login() {
       navigate('/dashboard');
     } catch (error) {
       toast.error('Número de empleado no válido. Por favor, intenta de nuevo.');
-      console.log(error);
+      // Error de autenticación manejado por el toast
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">

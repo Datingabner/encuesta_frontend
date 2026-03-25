@@ -107,7 +107,7 @@ export function Survey() {
         ]
       };
 
-      console.log('Enviando al backend:', requestData); // Para debug
+      // Enviar al backend para procesar las respuestas
 
       await encuestaService.enviarRespuestas(Number(id), requestData);
       toast.success('¡Encuesta enviada exitosamente!');

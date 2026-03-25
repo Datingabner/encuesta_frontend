@@ -32,6 +32,18 @@ export const empleadoService = {
 
 // Añadir a src/services/api.ts
 export const adminService = {
+  // Validar API Key contra el backend
+  validarApiKey: async (apiKey: string): Promise<{ valid: boolean; message?: string }> => {
+    try {
+      const response = await api.post('/admin/validate-key', { apiKey });
+      return response.data;
+    } catch (error: any) {
+      return { 
+        valid: false, 
+        message: error.response?.data?.message || 'Error al validar credentials' 
+      };
+    }
+  },
   obtenerResultados: async (apiKey: string): Promise<AdminResponse> => {
     const { data } = await api.get<AdminResponse>('/admin/results', {
       headers: { 'x-api-key': apiKey }

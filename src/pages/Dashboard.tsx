@@ -149,7 +149,7 @@ export function Dashboard() {
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-blue-600 h-2 rounded-full transition-all"
-                          style={{ width: `${(encuesta.estado)==="en_progreso"? 0 :100}%` }}
+                          style={{ width: `${encuesta.estado === 'en_progreso' ? 0 : 100}%` }}
                         />
                       </div>
                     )}
@@ -159,7 +159,7 @@ export function Dashboard() {
                         {encuesta.estado === 'completada' && encuesta.fechaCompletado
                           ? `Completada`
                           : encuesta.estado === 'en_progreso'
-                          ? `${(encuesta.estado)==="en_progreso"? 0 :100}% completado`
+                          ? `0% completado`
                           : 'Completada'}
                       </span>
                       <Button
