@@ -58,38 +58,38 @@ export const adminService = {
 export const empleadoAdminService = {
   // Obtener todos los empleados (con filtros opcionales)
   obtenerEmpleados: async (params?: { activo?: boolean; departamento?: number }): Promise<EmpleadoCRUD[]> => {
-    const response = await adminApi.get<EmpleadoCRUD[]>('/rh/empleados/', { params });
+    const response = await adminApi.get<EmpleadoCRUD[]>('/empleados/', { params });
     console.log("Retornas esto: ", response.data)
     return response.data;
   },
 
   // Obtener empleado por ID
   obtenerEmpleado: async (id: number): Promise<EmpleadoCRUD> => {
-    const response = await adminApi.get<EmpleadoCRUD>(`/rh/empleados/${id}`);
+    const response = await adminApi.get<EmpleadoCRUD>(`/empleados/${id}`);
     return response.data;
   },
 
   // Crear nuevo empleado
   crearEmpleado: async (data: CreateEmpleadoRequest): Promise<EmpleadoCreateResponse> => {
-    const response = await adminApi.post<EmpleadoCreateResponse>('/rh/empleados/', data);
+    const response = await adminApi.post<EmpleadoCreateResponse>('/empleados/', data);
     return response.data;
   },
 
   // Actualizar empleado completo (PUT)
   actualizarEmpleado: async (id: number, data: UpdateEmpleadoRequest): Promise<EmpleadoUpdateResponse> => {
-    const response = await adminApi.put<EmpleadoUpdateResponse>(`/rh/empleados/${id}`, data);
+    const response = await adminApi.put<EmpleadoUpdateResponse>(`/empleados/${id}`, data);
     return response.data;
   },
 
   // Actualizar empleado parcialmente (PATCH)
   actualizarParcialEmpleado: async (id: number, data: UpdateEmpleadoRequest): Promise<EmpleadoUpdateResponse> => {
-    const response = await adminApi.patch<EmpleadoUpdateResponse>(`/rh/empleados/${id}`, data);
+    const response = await adminApi.patch<EmpleadoUpdateResponse>(`/empleados/${id}`, data);
     return response.data;
   },
 
   // Eliminar empleado (soft delete)
   eliminarEmpleado: async (id: number): Promise<EmpleadoDeleteResponse> => {
-    const response = await adminApi.delete<EmpleadoDeleteResponse>(`/rh/empleados/${id}`);
+    const response = await adminApi.delete<EmpleadoDeleteResponse>(`/empleados/${id}`);
     return response.data;
   },
 };

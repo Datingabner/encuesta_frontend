@@ -68,7 +68,7 @@ export function AdminDashboard() {
       if (filterActivo !== null) params.activo = filterActivo;
       if (search) params.search = search;
       
-      const response = await adminApi.get<EmpleadoCRUD[]>('/rh/empleados/', { params });
+      const response = await adminApi.get<EmpleadoCRUD[]>('/empleados/', { params });
       setEmpleados(response.data);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Error al cargar empleados');
@@ -107,11 +107,11 @@ export function AdminDashboard() {
       setSavingEmpleado(true);
       if (empleadoSeleccionado) {
         // Actualizar
-        const response = await adminApi.put(`/rh/empleados/${empleadoSeleccionado.id}`, data);
+        const response = await adminApi.put(`/empleados/${empleadoSeleccionado.id}`, data);
         toast.success(response.data.message || 'Empleado actualizado correctamente');
       } else {
         // Crear
-        const response = await adminApi.post('/rh/empleados', data);
+        const response = await adminApi.post('/empleados', data);
         toast.success(response.data.message || 'Empleado creado correctamente');
       }
       setEmpleadoModalOpen(false);
@@ -125,7 +125,7 @@ export function AdminDashboard() {
 
   const handleEliminarEmpleado = async (id: number) => {
     try {
-      const response = await adminApi.delete(`/rh/empleados/${id}`);
+      const response = await adminApi.delete(`/empleados/${id}`);
       toast.success(response.data.message || 'Empleado desactivado correctamente');
       setDeleteConfirmId(null);
       fetchEmpleados();
