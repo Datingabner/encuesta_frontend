@@ -6,7 +6,7 @@ import { Card } from '../components/ui/Card';
 import { SkeletonCard } from '../components/ui/Skeleton';
 import { formatearFecha, getEstadoColor, getEstadoTexto } from '../utils/helpers';
 import type { DataProgresoEmpleado } from '../types';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, InfoIcon } from 'lucide-react';
 
 export function Progress() {
   const [progreso, setProgreso] = useState<DataProgresoEmpleado | null>(null);
@@ -121,11 +121,11 @@ export function Progress() {
                           <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[120px]">
                             <div
                               className="bg-blue-600 h-2 rounded-full transition-all"
-                              style={{ width: `${progreso.data.estadisticas.enviadas}%` }}
+                              style={{ width: `${progreso.data.estadisticas.encuestas_completadas}%` }}
                             />
                           </div>
                           <span className="text-sm text-gray-600 min-w-[45px]">
-                            {progreso.data.estadisticas.enviadas}%
+                            {progreso.data.estadisticas.encuestas_completadas}%
                           </span>
                         </div>
                       </td>
@@ -155,7 +155,7 @@ export function Progress() {
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">ℹ</span>
+                <span className="text-white font-bold text-lg"><InfoIcon/></span>
               </div>
             </div>
             <div>
