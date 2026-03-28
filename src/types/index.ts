@@ -150,3 +150,43 @@ export interface ProgresoEmpleado {
     encuestas_completadas: number
   };
 }*/
+
+// === TIPOS PARA CRUD DE EMPLEADOS (ADMIN) ===
+
+export interface EmpleadoCRUD {
+  id: number;
+  numero_empleado: string;
+  nombre: string;
+  email: string;
+  departamento: string;
+  activo: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateEmpleadoRequest {
+  numero_empleado: string;
+  nombre: string;
+  email: string;
+  departamento: string;
+}
+
+export interface UpdateEmpleadoRequest {
+  numero_empleado?: string;
+  nombre?: string;
+  email?: string;
+  departamento?: string;
+  activo?: boolean;
+}
+
+export interface EmpleadosResponse {
+  success: boolean;
+  data: EmpleadoCRUD[];
+  message?: string;
+}
+
+export interface EmpleadoResponse {
+  success: boolean;
+  data: EmpleadoCRUD;
+  message?: string;
+}

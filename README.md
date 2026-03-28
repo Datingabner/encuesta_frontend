@@ -15,6 +15,7 @@ Frontend de una aplicación web para la gestión y respuesta de encuestas de eva
 - **Panel de administración**: Acceso seguro con API Key
 - **Resultados detallados**: Visualización de respuestas de cada empleado
 - **Estadísticas globales**: Distribución de riesgo, promedio de puntajes, total de encuestas completadas
+- **Gestión de empleados**: CRUD completo (crear, leer, actualizar, desactivar empleados)
 - **Exportación de datos**: Información estructurada para análisis
 
 ## Requisitos Previos
@@ -181,6 +182,14 @@ El frontend espera que el backend proporcione los siguientes endpoints:
 ### Administración
 - `POST /api/admin/validate-key` - Validar API Key de admin
 - `GET /api/admin/results` - Obtener resultados (requiere header x-api-key)
+
+### Gestión de Empleados (Admin)
+- `GET /api/empleados` - Listar todos los empleados (soporta filtros `?activo=true`, `?departamento=1`, `?search=texto`)
+- `POST /api/empleados` - Crear nuevo empleado
+- `GET /api/empleados/<id>` - Obtener empleado por ID
+- `PUT /api/empleados/<id>` - Actualizar empleado completo
+- `PATCH /api/empleados/<id>` - Actualizar empleado parcialmente
+- `DELETE /api/empleados/<id>` - Desactivar empleado (soft delete)
 
 ## Autenticación
 
