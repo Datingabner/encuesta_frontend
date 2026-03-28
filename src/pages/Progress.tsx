@@ -121,7 +121,7 @@ export function Progress() {
                           <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[120px]">
                             <div
                               className="bg-blue-600 h-2 rounded-full transition-all"
-                              style={{ width: `${progreso.data.estadisticas.encuestas_completadas}%` }}
+                              style={{ width: `${(progreso.data.estadisticas.encuestas_completadas)*100}%` }}
                             />
                           </div>
                           <span className="text-sm text-gray-600 min-w-[45px]">
