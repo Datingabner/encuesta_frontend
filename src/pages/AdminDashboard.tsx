@@ -14,6 +14,13 @@ import { EmpleadoModal } from '../components/EmpleadoModal';
 
 type TabType = 'resultados' | 'empleados';
 
+// Función para calcular nivel de riesgo basado en puntaje (0-21)
+const calcularNivelRiesgo = (puntaje: number): 'bajo' | 'medio' | 'alto' => {
+  if (puntaje <= 7) return 'bajo';
+  if (puntaje <= 14) return 'medio';
+  return 'alto';
+};
+
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('resultados');
   
@@ -299,7 +306,7 @@ export function AdminDashboard() {
                             <span className="font-bold text-blue-600">{resultado.puntaje_total}</span>
                           </td>
                           <td className="py-3 px-4">
-                            <RiskBadge nivel={resultado.nivel_riesgo} />
+                            <RiskBadge nivel={calcularNivelRiesgo(resultado.puntaje_total)} />
                           </td>
                           <td className="py-3 px-4 text-gray-600">
                             {new Date(resultado.fecha_completado).toLocaleDateString('es-ES')}

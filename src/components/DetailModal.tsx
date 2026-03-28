@@ -8,6 +8,13 @@ interface DetailModalProps {
   resultado: AdminResultado | null;
 }
 
+// Función para calcular nivel de riesgo basado en puntaje (0-21)
+const calcularNivelRiesgo = (puntaje: number): 'bajo' | 'medio' | 'alto' => {
+  if (puntaje <= 7) return 'bajo';
+  if (puntaje <= 14) return 'medio';
+  return 'alto';
+};
+
 const responseMap: Record<string, string> = {
   '0': 'Nunca',
   '1': 'Casi nunca',
@@ -52,7 +59,7 @@ export function DetailModal({ isOpen, onClose, resultado }: DetailModalProps) {
               <p><span className="font-semibold text-gray-700">Tipo:</span> <span className="capitalize">{resultado.encuesta.tipo}</span></p>
               <p><span className="font-semibold text-gray-700">Descripción:</span> {resultado.encuesta.descripcion}</p>
               <p><span className="font-semibold text-gray-700">Puntaje Total:</span> <span className="font-bold text-lg text-blue-600">{resultado.puntaje_total}</span></p>
-              <div><span className="font-semibold text-gray-700">Nivel de Riesgo:</span> <RiskBadge nivel={resultado.nivel_riesgo} /></div>
+              <div><span className="font-semibold text-gray-700">Nivel de Riesgo:</span> <RiskBadge nivel={calcularNivelRiesgo(resultado.puntaje_total)} /></div>
               <p><span className="font-semibold text-gray-700">Fecha:</span> {new Date(resultado.fecha_completado).toLocaleDateString('es-ES', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
           </div>
