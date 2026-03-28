@@ -107,11 +107,11 @@ export function AdminDashboard() {
       setSavingEmpleado(true);
       if (empleadoSeleccionado) {
         // Actualizar
-        const response = await adminApi.put(`/empleados/${empleadoSeleccionado.id}`, data);
+        const response = await adminApi.put(`/empleados/${empleadoSeleccionado.id}/`, data);
         toast.success(response.data.message || 'Empleado actualizado correctamente');
       } else {
         // Crear
-        const response = await adminApi.post('/empleados', data);
+        const response = await adminApi.post('/empleados/', data);
         toast.success(response.data.message || 'Empleado creado correctamente');
       }
       setEmpleadoModalOpen(false);
@@ -125,7 +125,7 @@ export function AdminDashboard() {
 
   const handleEliminarEmpleado = async (id: number) => {
     try {
-      const response = await adminApi.delete(`/empleados/${id}`);
+      const response = await adminApi.delete(`/empleados/${id}/`);
       toast.success(response.data.message || 'Empleado desactivado correctamente');
       setDeleteConfirmId(null);
       fetchEmpleados();

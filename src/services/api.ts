@@ -65,7 +65,7 @@ export const empleadoAdminService = {
 
   // Obtener empleado por ID
   obtenerEmpleado: async (id: number): Promise<EmpleadoCRUD> => {
-    const response = await adminApi.get<EmpleadoCRUD>(`/empleados/${id}`);
+    const response = await adminApi.get<EmpleadoCRUD>(`/empleados/${id}/`);
     return response.data;
   },
 
@@ -77,19 +77,19 @@ export const empleadoAdminService = {
 
   // Actualizar empleado completo (PUT)
   actualizarEmpleado: async (id: number, data: UpdateEmpleadoRequest): Promise<EmpleadoUpdateResponse> => {
-    const response = await adminApi.put<EmpleadoUpdateResponse>(`/empleados/${id}`, data);
+    const response = await adminApi.put<EmpleadoUpdateResponse>(`/empleados/${id}/`, data);
     return response.data;
   },
 
   // Actualizar empleado parcialmente (PATCH)
   actualizarParcialEmpleado: async (id: number, data: UpdateEmpleadoRequest): Promise<EmpleadoUpdateResponse> => {
-    const response = await adminApi.patch<EmpleadoUpdateResponse>(`/empleados/${id}`, data);
+    const response = await adminApi.patch<EmpleadoUpdateResponse>(`/empleados/${id}/`, data);
     return response.data;
   },
 
   // Eliminar empleado (soft delete)
   eliminarEmpleado: async (id: number): Promise<EmpleadoDeleteResponse> => {
-    const response = await adminApi.delete<EmpleadoDeleteResponse>(`/empleados/${id}`);
+    const response = await adminApi.delete<EmpleadoDeleteResponse>(`/empleados/${id}/`);
     return response.data;
   },
 };
