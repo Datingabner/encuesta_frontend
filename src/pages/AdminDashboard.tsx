@@ -68,8 +68,8 @@ export function AdminDashboard() {
       if (filterActivo !== null) params.activo = filterActivo;
       if (search) params.search = search;
       
-      const response = await adminApi.get<{ success: boolean; data: EmpleadoCRUD[] }>('/empleados/', { params });
-      setEmpleados(response.data.data);
+      const response = await adminApi.get<EmpleadoCRUD[]>('/rh/empleados/', { params });
+      setEmpleados(response.data);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Error al cargar empleados');
     } finally {
@@ -107,12 +107,12 @@ export function AdminDashboard() {
       setSavingEmpleado(true);
       if (empleadoSeleccionado) {
         // Actualizar
-        await adminApi.put(`/empleados/${empleadoSeleccionado.id}`, data);
-        toast.success('Empleado actualizado correctamente');
+        const response = await adminApi.put(`/rh/empleados/${empleadoSeleccionado.id}`, data);
+        toast.success(response.data.message || 'Empleado actualizado correctamente');
       } else {
         // Crear
-        await adminApi.post('/empleados', data);
-        toast.success('Empleado creado correctamente');
+        const response = await adminApi.post('/rh/empleados', data);
+        toast.success(response.data.message || 'Empleado creado correctamente');
       }
       setEmpleadoModalOpen(false);
       fetchEmpleados();
@@ -125,8 +125,8 @@ export function AdminDashboard() {
 
   const handleEliminarEmpleado = async (id: number) => {
     try {
-      await adminApi.delete(`/empleados/${id}`);
-      toast.success('Empleado desactivado correctamente');
+      const response = await adminApi.delete(`/rh/empleados/${id}`);
+      toast.success(response.data.message || 'Empleado desactivado correctamente');
       setDeleteConfirmId(null);
       fetchEmpleados();
     } catch (error: any) {
@@ -135,10 +135,10 @@ export function AdminDashboard() {
   };
   console.log("Empleados: ",empleados);
   const filteredEmpleados = empleados.filter(emp => 
-    emp.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.nombre_completo.toLowerCase().includes(searchTerm.toLowerCase()) ||
     emp.numero_empleado.toLowerCase().includes(searchTerm.toLowerCase()) ||
     emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    emp.departamento.toLowerCase().includes(searchTerm.toLowerCase())
+    emp.id_departamento.toString().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -415,7 +415,7 @@ export function AdminDashboard() {
                       <th className="text-left py-3 px-4 font-semibold text-gray-700">No. Empleado</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-700">Nombre</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Departamento</th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-700">ID Depto</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-700">Estado</th>
                       <th className="text-left py-3 px-4 font-semibold text-gray-700">Acciones</th>
                     </tr>
@@ -424,9 +424,9 @@ export function AdminDashboard() {
                     {filteredEmpleados.map((empleado) => (
                       <tr key={empleado.id} className="border-b border-gray-100 hover:bg-blue-50 transition">
                         <td className="py-3 px-4 text-gray-900 font-medium">{empleado.numero_empleado}</td>
-                        <td className="py-3 px-4 text-gray-900">{empleado.nombre}</td>
+                        <td className="py-3 px-4 text-gray-900">{empleado.nombre_completo}</td>
                         <td className="py-3 px-4 text-gray-600">{empleado.email}</td>
-                        <td className="py-3 px-4 text-gray-600">{empleado.departamento}</td>
+                        <td className="py-3 px-4 text-gray-600">{empleado.id_departamento}</td>
                         <td className="py-3 px-4">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             empleado.activo

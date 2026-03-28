@@ -15,9 +15,9 @@ interface EmpleadoModalProps {
 export function EmpleadoModal({ isOpen, onClose, empleado, onSave, isLoading }: EmpleadoModalProps) {
   const [formData, setFormData] = useState<CreateEmpleadoRequest>({
     numero_empleado: '',
-    nombre: '',
+    nombre_completo: '',
     email: '',
-    departamento: '',
+    id_departamento: 0,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -25,16 +25,16 @@ export function EmpleadoModal({ isOpen, onClose, empleado, onSave, isLoading }: 
     if (empleado) {
       setFormData({
         numero_empleado: empleado.numero_empleado,
-        nombre: empleado.nombre,
+        nombre_completo: empleado.nombre_completo,
         email: empleado.email,
-        departamento: empleado.departamento,
+        id_departamento: empleado.id_departamento,
       });
     } else {
       setFormData({
         numero_empleado: '',
-        nombre: '',
+        nombre_completo: '',
         email: '',
-        departamento: '',
+        id_departamento: 0,
       });
     }
     setErrors({});
@@ -46,16 +46,16 @@ export function EmpleadoModal({ isOpen, onClose, empleado, onSave, isLoading }: 
     if (!formData.numero_empleado.trim()) {
       newErrors.numero_empleado = 'El número de empleado es requerido';
     }
-    if (!formData.nombre.trim()) {
-      newErrors.nombre = 'El nombre es requerido';
+    if (!formData.nombre_completo.trim()) {
+      newErrors.nombre_completo = 'El nombre es requerido';
     }
     if (!formData.email.trim()) {
       newErrors.email = 'El email es requerido';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Email inválido';
     }
-    if (!formData.departamento.trim()) {
-      newErrors.departamento = 'El departamento es requerido';
+    if (!formData.id_departamento || formData.id_departamento <= 0) {
+      newErrors.id_departamento = 'El departamento es requerido';
     }
     
     setErrors(newErrors);
@@ -71,7 +71,8 @@ export function EmpleadoModal({ isOpen, onClose, empleado, onSave, isLoading }: 
   const handleChange = (field: keyof CreateEmpleadoRequest) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    const value = field === 'id_departamento' ? parseInt(e.target.value) || 0 : e.target.value;
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
@@ -105,9 +106,9 @@ export function EmpleadoModal({ isOpen, onClose, empleado, onSave, isLoading }: 
         
         <Input
           label="Nombre Completo"
-          value={formData.nombre}
-          onChange={handleChange('nombre')}
-          error={errors.nombre}
+          value={formData.nombre_completo}
+          onChange={handleChange('nombre_completo')}
+          error={errors.nombre_completo}
           placeholder="Ej: Juan Pérez García"
           disabled={isLoading}
         />
@@ -123,11 +124,12 @@ export function EmpleadoModal({ isOpen, onClose, empleado, onSave, isLoading }: 
         />
         
         <Input
-          label="Departamento"
-          value={formData.departamento}
-          onChange={handleChange('departamento')}
-          error={errors.departamento}
-          placeholder="Ej: Recursos Humanos"
+          label="ID Departamento"
+          type="number"
+          value={formData.id_departamento.toString()}
+          onChange={handleChange('id_departamento')}
+          error={errors.id_departamento}
+          placeholder="Ej: 1"
           disabled={isLoading}
         />
       </form>

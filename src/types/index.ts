@@ -156,37 +156,43 @@ export interface ProgresoEmpleado {
 export interface EmpleadoCRUD {
   id: number;
   numero_empleado: string;
-  nombre: string;
+  nombre_completo: string;
   email: string;
-  departamento: string;
+  id_departamento: number;
   activo: boolean;
-  created_at?: string;
-  updated_at?: string;
 }
 
 export interface CreateEmpleadoRequest {
   numero_empleado: string;
-  nombre: string;
+  nombre_completo: string;
   email: string;
-  departamento: string;
+  id_departamento: number;
+  password?: string;
+  activo?: boolean;
 }
 
 export interface UpdateEmpleadoRequest {
   numero_empleado?: string;
-  nombre?: string;
+  nombre_completo?: string;
   email?: string;
-  departamento?: string;
+  id_departamento?: number;
+  password?: string;
   activo?: boolean;
 }
 
-export interface EmpleadosResponse {
+export interface EmpleadoCreateResponse {
   success: boolean;
-  data: EmpleadoCRUD[];
-  message?: string;
+  message: string;
+  data: EmpleadoCRUD;
 }
 
-export interface EmpleadoResponse {
+export interface EmpleadoUpdateResponse {
   success: boolean;
+  message: string;
   data: EmpleadoCRUD;
-  message?: string;
+}
+
+export interface EmpleadoDeleteResponse {
+  success: boolean;
+  message: string;
 }
