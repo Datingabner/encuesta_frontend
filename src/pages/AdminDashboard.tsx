@@ -68,7 +68,7 @@ export function AdminDashboard() {
       if (filterActivo !== null) params.activo = filterActivo;
       if (search) params.search = search;
       
-      const response = await adminApi.get<{ success: boolean; data: EmpleadoCRUD[] }>('/empleados', { params });
+      const response = await adminApi.get<{ success: boolean; data: EmpleadoCRUD[] }>('/empleados/', { params });
       setEmpleados(response.data.data);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Error al cargar empleados');
