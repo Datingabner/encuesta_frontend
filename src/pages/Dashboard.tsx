@@ -134,7 +134,7 @@ export function Dashboard() {
                   <div className="space-y-4">
                     <div className="flex items-start justify-between">
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {encuesta.encuesta_nombre}
+                        {encuesta.encuesta_tipo}
                       </h3>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${getEstadoColor(
