@@ -187,10 +187,17 @@ export function AdminDashboard() {
   const statistics = data.data.statistics;
   const results = data.data.results;
 
+  // Calcular distribución de riesgos basada en puntaje (0-21)
+  const riesgosCalculados = results.reduce((acc, resultado) => {
+    const nivel = calcularNivelRiesgo(resultado.puntaje_total);
+    acc[nivel]++;
+    return acc;
+  }, { bajo: 0, medio: 0, alto: 0 });
+
   const chartData = [
-    { name: 'Bajo', value: statistics.distribucion_riesgo.bajo, fill: '#10b981' },
-    { name: 'Medio', value: statistics.distribucion_riesgo.medio, fill: '#f59e0b' },
-    { name: 'Alto', value: statistics.distribucion_riesgo.alto, fill: '#ef4444' },
+    { name: 'Bajo', value: riesgosCalculados.bajo, fill: '#10b981' },
+    { name: 'Medio', value: riesgosCalculados.medio, fill: '#f59e0b' },
+    { name: 'Alto', value: riesgosCalculados.alto, fill: '#ef4444' },
   ].filter(item => item.value > 0);
 
   return (
@@ -268,7 +275,7 @@ export function AdminDashboard() {
                   <div>
                     <p className="text-gray-600 text-sm font-semibold">RIESGOS ALTOS</p>
                     <p className="text-3xl font-bold text-red-600 mt-2">
-                      {statistics.distribucion_riesgo.alto}
+                      {riesgosCalculados.alto}
                     </p>
                   </div>
                   <AlertCircle className="w-12 h-12 text-red-100" />
